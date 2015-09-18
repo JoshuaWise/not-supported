@@ -1,0 +1,38 @@
+{
+  "name": "not-supported",
+  "version": "0.0.0",
+  "description": "A script that allows you to use HTML5 features with confidence, by informing non-HTML5 users of their heresy.",
+  "browser": "build/not-supported.min.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/JoshuaWise/not-supported.git"
+  },
+  "keywords": [
+    "html5",
+    "force",
+    "redirect",
+    "modernizr",
+    "modern",
+    "es5",
+    "css3"
+  ],
+  "author": "Joshua Wise <josh@joshuawise.ninja> (www.joshuawise.ninja)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/JoshuaWise/not-supported/issues"
+  },
+  "homepage": "https://github.com/JoshuaWise/not-supported",
+  "devDependencies": {
+    "browserify": "^11.1.0",
+    "gulp": "^3.9.0",
+    "gulp-rename": "^1.2.2",
+    "gulp-sourcemaps": "^1.5.2",
+    "gulp-uglify": "^1.4.1",
+    "modernizr": "^3.0.0",
+    "vinyl-buffer": "^1.0.0",
+    "vinyl-source-stream": "^1.1.0"
+  }
+}

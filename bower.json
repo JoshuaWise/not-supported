@@ -1,0 +1,27 @@
+{
+  "name": "not-supported",
+  "version": "0.0.0",
+  "homepage": "https://github.com/JoshuaWise/not-supported",
+  "authors": [
+    "Joshua Wise <josh@joshuawise.ninja>"
+  ],
+  "description": "A script that allows you to use HTML5 features with confidence, by informing non-HTML5 users of their heresy.",
+  "main": "build/not-supported.min.js",
+  "keywords": [
+    "html5",
+    "force",
+    "redirect",
+    "modernizr",
+    "modern",
+    "es5",
+    "css3"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
