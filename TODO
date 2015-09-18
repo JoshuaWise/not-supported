@@ -1,0 +1,33 @@
+	calc()						(no prefixes, supports +, -, /, and * operators)
+vw
+vh
+	rem							(including in 'font' shorthand rule)
+	box-sizing					(no prefixes)
+	user-select: none			(any prefix)
+	pointer-events: none
+	css transitions				(no prefixes)
+	css 3d transforms			(any prefix)
+	css linear-gradient			(no prefix, final "to" syntax)
+	css animation				(any prefix)
+	background-image options 	(background-size in shorthand, background-position offset from edges)
+	flexbox						(modern syntax, flex-wrap, any prefix)
+
+ecmascript 5
+strict mode
+typed arrays
+
+dataset
+classList
+blob constructing
+blob URLs
+web sockets
+web workers
+requestAnimationFrame
+matchMedia
+
+canvas (and text api)
+defer attribute on <script>
+async attribute on <script>
+audio element
+video element
+inline svg in html

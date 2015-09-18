@@ -1,0 +1,22 @@
+{
+	"enableJSClass": false,
+	"enableClasses": false,
+	"options": [
+		"addTest",
+		"atRule",
+		"domPrefixes",
+		"hasEvent",
+		"mq",
+		"prefixed",
+		"testProp",
+		"testAllProps",
+		"testStyles"
+	],
+	"feature-detects": [
+		"css/userselect",
+		"css/transforms3d",
+		"css/animations",
+		"css/flexbox",
+		"css/flexwrap"
+	]
+}
