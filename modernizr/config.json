@@ -26,7 +26,7 @@
 		"url/bloburls",
 		"websockets",
 		"websockets/binary",
-		"workers/websockets",
+		"workers/webworkers",
 		"canvastext",
 		"script/defer",
 		"script/async",
