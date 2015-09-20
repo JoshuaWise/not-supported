@@ -4,10 +4,13 @@
 	"options": [
 		"addTest",
 		"atRule",
+		"prefixes",
 		"domPrefixes",
 		"hasEvent",
+		"load",
 		"mq",
 		"prefixed",
+		"prefixedCSS",
 		"testProp",
 		"testAllProps",
 		"testStyles"
@@ -28,6 +31,7 @@
 		"websockets/binary",
 		"workers/webworkers",
 		"canvastext",
+		"history",
 		"script/defer",
 		"script/async",
 		"audio",

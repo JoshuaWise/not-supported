@@ -1,6 +1,6 @@
 /*!
  * modernizr v3.0.0
- * Build http://modernizr.com/download?-cssanimations-csstransforms3d-flexbox-flexwrap-userselect-addtest-atrule-domprefixes-hasevent-mq-prefixed-testallprops-testprop-teststyles-dontmin
+ * Build http://modernizr.com/download?-audio-blobconstructor-bloburls-canvastext-cssanimations-csstransforms3d-cssvhunit-cssvwunit-es5-flexbox-flexwrap-history-inlinesvg-scriptasync-scriptdefer-typedarrays-userselect-video-websockets-websocketsbinary-webworkers-addtest-atrule-domprefixes-hasevent-load-mq-prefixed-prefixedcss-prefixes-testallprops-testprop-teststyles-dontmin
  *
  * Copyright (c)
  *  Faruk Ates
@@ -564,6 +564,45 @@
   
 
   /**
+   * List of property values to set for css tests. See ticket #21
+   * http://git.io/vUGl4
+   *
+   * @memberof Modernizr
+   * @name Modernizr._prefixes
+   * @optionName Modernizr._prefixes
+   * @optionProp prefixes
+   * @access public
+   * @example
+   *
+   * Modernizr._prefixes is the internal list of prefixes that we test against
+   * inside of things like [prefixed](#modernizr-prefixed) and [prefixedCSS](#-code-modernizr-prefixedcss). It is simply
+   * an array of kebab-case vendor prefixes you can use within your code.
+   *
+   * Some common use cases include
+   *
+   * Generating all possible prefixed version of a CSS property
+   * ```js
+   * var rule = Modernizr._prefixes.join('transform: rotate(20deg); ');
+   *
+   * rule === 'transform: rotate(20deg); webkit-transform: rotate(20deg); moz-transform: rotate(20deg); o-transform: rotate(20deg); ms-transform: rotate(20deg);'
+   * ```
+   *
+   * Generating all possible prefixed version of a CSS value
+   * ```js
+   * rule = 'display:' +  Modernizr._prefixes.join('flex; display:') + 'flex';
+   *
+   * rule === 'display:flex; display:-webkit-flex; display:-moz-flex; display:-o-flex; display:-ms-flex; display:flex'
+   * ```
+   */
+
+  var prefixes = (ModernizrProto._config.usePrefixes ? ' -webkit- -moz- -o- -ms- '.split(' ') : []);
+
+  // expose these for the plugin API. Look in the source for how to join() them against your input
+  ModernizrProto._prefixes = prefixes;
+
+  
+
+  /**
    * List of JavaScript DOM values used for tests
    *
    * @memberof Modernizr
@@ -685,6 +724,45 @@
 
   ModernizrProto.hasEvent = hasEvent;
   
+
+  /**
+   * Previously, Modernizr.load was an alias for yepnope. Since yepnope was
+   * deprecated, we removed it as well. It is not available on the website builder,
+   * this is only included as an improved warning to those who build a custom
+   * version locally.
+   *
+   * @memberof Modernizr
+   * @name Modernizr.load
+   * @access private
+   * @function load
+   *
+   */
+
+  var err = function() {};
+  var warn = function() {};
+
+  if (window.console) {
+    err = function() {
+      var method = console.error ? 'error' : 'log';
+      window.console[method].apply(window.console, Array.prototype.slice.call(arguments));
+    };
+
+    warn = function() {
+      var method = console.warn ? 'warn' : 'log';
+      window.console[method].apply(window.console, Array.prototype.slice.call(arguments));
+    };
+  }
+
+  ModernizrProto.load = function() {
+    if ('yepnope' in window) {
+      warn('yepnope.js (aka Modernizr.load) is no longer included as part of Modernizr. yepnope appears to be available on the page, so we’ll use it to handle this call to Modernizr.load, but please update your code to use yepnope directly.\n See http://github.com/Modernizr/Modernizr/issues/1182 for more information.');
+      window.yepnope.apply(window, [].slice.call(arguments, 0));
+    } else {
+      err('yepnope.js (aka Modernizr.load) is no longer included as part of Modernizr. Get it from http://yepnopejs.com. See http://github.com/Modernizr/Modernizr/issues/1182 for more information.');
+    }
+  };
+
+
 
   /**
    * getBody returns the body of a document, or an element that can stand in for
@@ -1238,6 +1316,40 @@
   
 
   /**
+   * prefixedCSS is just like [prefixed](#modernizr-prefixed), but the returned values are in
+   * kebab-case (e.g. `box-sizing`) rather than camelCase (boxSizing).
+   *
+   * @memberof Modernizr
+   * @name Modernizr.prefixedCSS
+   * @optionName Modernizr.prefixedCSS()
+   * @optionProp prefixedCSS
+   * @access public
+   * @function prefixedCSS
+   * @param {string} prop - String name of the property to test for
+   * @returns {string|false} The string representing the (possibly prefixed)
+   * valid version of the property, or `false` when it is unsupported.
+   * @example
+   *
+   * `Modernizr.prefixedCSS` is like `Modernizr.prefixed`, but returns the result
+   * in hyphenated form
+   *
+   * ```js
+   * Modernizr.prefixedCSS('transition') // '-moz-transition' in old Firefox
+   * ```
+   *
+   * Since it is only useful for CSS style properties, it can only be tested against
+   * an HTMLElement.
+   *
+   * Properties can be passed as both the DOM style camelCase or CSS style kebab-case.
+   */
+
+  var prefixedCSS = ModernizrProto.prefixedCSS = function(prop) {
+    var prefixedProp = prefixed(prop);
+    return prefixedProp && domToCSS(prefixedProp);
+  };
+  
+
+  /**
    * testProp() investigates whether a given style property is recognized
    * Property names can be provided in either camelCase or kebab-case.
    *
@@ -1536,6 +1648,763 @@ else {
 
   Modernizr.addTest('flexwrap', testAllProps('flexWrap', 'wrap', true));
 
+/*!
+{
+  "name": "CSS vw unit",
+  "property": "cssvwunit",
+  "caniuse": "viewport-units",
+  "tags": ["css"],
+  "builderAliases": ["css_vwunit"],
+  "notes": [{
+    "name": "Related Modernizr Issue",
+    "href": "https://github.com/Modernizr/Modernizr/issues/572"
+  },{
+    "name": "JSFiddle Example",
+    "href": "http://jsfiddle.net/FWeinb/etnYC/"
+  }]
+}
+!*/
+
+  testStyles('#modernizr { width: 50vw; }', function(elem) {
+    var width = parseInt(window.innerWidth / 2, 10);
+    var compStyle = parseInt((window.getComputedStyle ?
+                              getComputedStyle(elem, null) :
+                              elem.currentStyle).width, 10);
+
+    Modernizr.addTest('cssvwunit', compStyle == width);
+  });
+
+/*!
+{
+  "name": "CSS vh unit",
+  "property": "cssvhunit",
+  "caniuse": "viewport-units",
+  "tags": ["css"],
+  "builderAliases": ["css_vhunit"],
+  "notes": [{
+    "name": "Related Modernizr Issue",
+    "href": "https://github.com/Modernizr/Modernizr/issues/572"
+  },{
+    "name": "Similar JSFiddle",
+    "href": "http://jsfiddle.net/FWeinb/etnYC/"
+  }]
+}
+!*/
+
+  testStyles('#modernizr { height: 50vh; }', function(elem) {
+    var height = parseInt(window.innerHeight / 2, 10);
+    var compStyle = parseInt((window.getComputedStyle ?
+                              getComputedStyle(elem, null) :
+                              elem.currentStyle)['height'], 10);
+    Modernizr.addTest('cssvhunit', compStyle == height);
+  });
+
+/*!
+{
+  "name": "ES5 Array",
+  "property": "es5array",
+  "notes": [{
+    "name": "ECMAScript 5.1 Language Specification",
+    "href": "http://www.ecma-international.org/ecma-262/5.1/"
+  }],
+  "polyfills": ["es5shim"],
+  "authors": ["Ron Waldon (@jokeyrhyme)"],
+  "tags": ["es5"]
+}
+!*/
+/* DOC
+Check if browser implements ECMAScript 5 Array per specification.
+*/
+
+  Modernizr.addTest('es5array', function() {
+    return !!(Array.prototype &&
+      Array.prototype.every &&
+      Array.prototype.filter &&
+      Array.prototype.forEach &&
+      Array.prototype.indexOf &&
+      Array.prototype.lastIndexOf &&
+      Array.prototype.map &&
+      Array.prototype.some &&
+      Array.prototype.reduce &&
+      Array.prototype.reduceRight &&
+      Array.isArray);
+  });
+
+/*!
+{
+  "name": "ES5 Date",
+  "property": "es5date",
+  "notes": [{
+    "name": "ECMAScript 5.1 Language Specification",
+    "href": "http://www.ecma-international.org/ecma-262/5.1/"
+  }],
+  "polyfills": ["es5shim"],
+  "authors": ["Ron Waldon (@jokeyrhyme)"],
+  "tags": ["es5"]
+}
+!*/
+/* DOC
+Check if browser implements ECMAScript 5 Date per specification.
+*/
+
+  Modernizr.addTest('es5date', function() {
+    var isoDate = '2013-04-12T06:06:37.307Z',
+      canParseISODate = false;
+    try {
+      canParseISODate = !!Date.parse(isoDate);
+    } catch (e) {
+      // no ISO date parsing yet
+    }
+    return !!(Date.now &&
+      Date.prototype &&
+      Date.prototype.toISOString &&
+      Date.prototype.toJSON &&
+      canParseISODate);
+  });
+
+/*!
+{
+  "name": "ES5 Function",
+  "property": "es5function",
+  "notes": [{
+    "name": "ECMAScript 5.1 Language Specification",
+    "href": "http://www.ecma-international.org/ecma-262/5.1/"
+  }],
+  "polyfills": ["es5shim"],
+  "authors": ["Ron Waldon (@jokeyrhyme)"],
+  "tags": ["es5"]
+}
+!*/
+/* DOC
+Check if browser implements ECMAScript 5 Function per specification.
+*/
+
+  Modernizr.addTest('es5function', function() {
+    return !!(Function.prototype && Function.prototype.bind);
+  });
+
+/*!
+{
+  "name": "ES5 Object",
+  "property": "es5object",
+  "notes": [{
+    "name": "ECMAScript 5.1 Language Specification",
+    "href": "http://www.ecma-international.org/ecma-262/5.1/"
+  }],
+  "polyfills": ["es5shim", "es5sham"],
+  "authors": ["Ron Waldon (@jokeyrhyme)"],
+  "tags": ["es5"]
+}
+!*/
+/* DOC
+Check if browser implements ECMAScript 5 Object per specification.
+*/
+
+  Modernizr.addTest('es5object', function() {
+    return !!(Object.keys &&
+      Object.create &&
+      Object.getPrototypeOf &&
+      Object.getOwnPropertyNames &&
+      Object.isSealed &&
+      Object.isFrozen &&
+      Object.isExtensible &&
+      Object.getOwnPropertyDescriptor &&
+      Object.defineProperty &&
+      Object.defineProperties &&
+      Object.seal &&
+      Object.freeze &&
+      Object.preventExtensions);
+  });
+
+/*!
+{
+  "name": "ES5 Strict Mode",
+  "property": "strictmode",
+  "caniuse": "sctrict-mode",
+  "notes": [{
+    "name": "ECMAScript 5.1 Language Specification",
+    "href": "http://www.ecma-international.org/ecma-262/5.1/"
+  }],
+  "authors": ["@kangax"],
+  "tags": ["es5"],
+  "builderAliases": ["es5_strictmode"]
+}
+!*/
+/* DOC
+Check if browser implements ECMAScript 5 Object strict mode.
+*/
+
+  Modernizr.addTest('strictmode', (function() {'use strict'; return !this; })());
+
+/*!
+{
+  "name": "ES5 String",
+  "property": "es5string",
+  "notes": [{
+    "name": "ECMAScript 5.1 Language Specification",
+    "href": "http://www.ecma-international.org/ecma-262/5.1/"
+  }],
+  "polyfills": ["es5shim"],
+  "authors": ["Ron Waldon (@jokeyrhyme)"],
+  "tags": ["es5"]
+}
+!*/
+/* DOC
+Check if browser implements ECMAScript 5 String per specification.
+*/
+
+  Modernizr.addTest('es5string', function() {
+    return !!(String.prototype && String.prototype.trim);
+  });
+
+/*!
+{
+  "name": "JSON",
+  "property": "json",
+  "caniuse": "json",
+  "notes": [{
+    "name": "MDN documentation",
+    "href": "http://developer.mozilla.org/en/JSON"
+  }],
+  "polyfills": ["json2"]
+}
+!*/
+/* DOC
+Detects native support for JSON handling functions.
+*/
+
+  // this will also succeed if you've loaded the JSON2.js polyfill ahead of time
+  //   ... but that should be obvious. :)
+
+  Modernizr.addTest('json', 'JSON' in window && 'parse' in JSON && 'stringify' in JSON);
+
+/*!
+{
+  "name": "ES5 Syntax",
+  "property": "es5syntax",
+  "notes": [{
+    "name": "ECMAScript 5.1 Language Specification",
+    "href": "http://www.ecma-international.org/ecma-262/5.1/"
+  }, {
+    "name": "original implementation of detect code",
+    "href": "http://kangax.github.io/es5-compat-table/"
+  }],
+  "authors": ["Ron Waldon (@jokeyrhyme)"],
+  "warnings": ["This detect uses `eval()`, so CSP may be a problem."],
+  "tags": ["es5"]
+}
+!*/
+/* DOC
+Check if browser accepts ECMAScript 5 syntax.
+*/
+
+  Modernizr.addTest('es5syntax', function() {
+    var value, obj, stringAccess, getter, setter, reservedWords, zeroWidthChars;
+    try {
+      // Property access on strings
+      stringAccess = eval('"foobar"[3] === "b"');
+      // Getter in property initializer
+      getter = eval('({ get x(){ return 1 } }).x === 1');
+      eval('({ set x(v){ value = v; } }).x = 1');
+      // Setter in property initializer
+      setter = value === 1;
+      // Reserved words as property names
+      eval('obj = ({ if: 1 })');
+      reservedWords = obj['if'] === 1;
+      // Zero-width characters in identifiers
+      zeroWidthChars = eval('_\u200c\u200d = true');
+
+      return stringAccess && getter && setter && reservedWords && zeroWidthChars;
+    } catch (ignore) {
+      return false;
+    }
+  });
+
+/*!
+{
+  "name": "ES5 Immutable Undefined",
+  "property": "es5undefined",
+  "notes": [{
+    "name": "ECMAScript 5.1 Language Specification",
+    "href": "http://www.ecma-international.org/ecma-262/5.1/"
+  }, {
+    "name": "original implementation of detect code",
+    "href": "http://kangax.github.io/es5-compat-table/"
+  }],
+  "authors": ["Ron Waldon (@jokeyrhyme)"],
+  "tags": ["es5"]
+}
+!*/
+/* DOC
+Check if browser prevents assignment to global `undefined` per ECMAScript 5.
+*/
+
+  Modernizr.addTest('es5undefined', function() {
+    var result, originalUndefined;
+    try {
+      originalUndefined = window.undefined;
+      window.undefined = 12345;
+      result = typeof window.undefined === 'undefined';
+      window.undefined = originalUndefined;
+    } catch (e) {
+      return false;
+    }
+    return result;
+  });
+
+/*!
+{
+  "name": "ES5",
+  "property": "es5",
+  "notes": [{
+    "name": "ECMAScript 5.1 Language Specification",
+    "href": "http://www.ecma-international.org/ecma-262/5.1/"
+  }],
+  "polyfills": ["es5shim", "es5sham"],
+  "authors": ["Ron Waldon (@jokeyrhyme)"],
+  "tags": ["es5"]
+}
+!*/
+/* DOC
+Check if browser implements everything as specified in ECMAScript 5.
+*/
+
+  Modernizr.addTest('es5', function() {
+    return !!(
+      Modernizr.es5array &&
+      Modernizr.es5date &&
+      Modernizr.es5function &&
+      Modernizr.es5object &&
+      Modernizr.strictmode &&
+      Modernizr.es5string &&
+      Modernizr.json &&
+      Modernizr.es5syntax &&
+      Modernizr.es5undefined
+    );
+  });
+
+/*!
+{
+  "name": "Typed arrays",
+  "property": "typedarrays",
+  "caniuse": "typedarrays",
+  "tags": ["js"],
+  "authors": ["Stanley Stuart (@fivetanley)"],
+  "notes": [{
+    "name": "MDN documentation",
+    "href": "https://developer.mozilla.org/en-US/docs/JavaScript_typed_arrays"
+  },{
+    "name": "Kronos spec",
+    "href": "http://www.khronos.org/registry/typedarray/specs/latest/"
+  }],
+  "polyfills": ["joshuabell-polyfill"]
+}
+!*/
+/* DOC
+Detects support for native binary data manipulation via Typed Arrays in JavaScript.
+
+Does not check for DataView support; use `Modernizr.dataview` for that.
+*/
+
+  // Should fail in:
+  // Internet Explorer <= 9
+  // Firefox <= 3.6
+  // Chrome <= 6.0
+  // iOS Safari < 4.2
+  // Safari < 5.1
+  // Opera < 11.6
+  // Opera Mini, <= 7.0
+  // Android Browser < 4.0
+  // Blackberry Browser < 10.0
+
+  Modernizr.addTest('typedarrays', 'ArrayBuffer' in window);
+
+/*!
+{
+  "name": "Blob constructor",
+  "property": "blobconstructor",
+  "aliases": ["blob-constructor"],
+  "builderAliases": ["blob_constructor"],
+  "caniuse": "blobbuilder",
+  "notes": [{
+    "name": "W3C spec",
+    "href": "http://dev.w3.org/2006/webapi/FileAPI/#constructorBlob"
+  }],
+  "polyfills": ["blobjs"]
+}
+!*/
+/* DOC
+Detects support for the Blob constructor, for creating file-like objects of immutable, raw data.
+*/
+
+  Modernizr.addTest('blobconstructor', function() {
+    try {
+      return !!new Blob();
+    } catch (e) {
+      return false;
+    }
+  }, {
+    aliases: ['blob-constructor']
+  });
+
+/*!
+{
+  "name": "Blob URLs",
+  "property": "bloburls",
+  "caniuse": "bloburls",
+  "notes": [{
+    "name": "W3C Working Draft",
+    "href": "http://www.w3.org/TR/FileAPI/#creating-revoking"
+  }],
+  "tags": ["file", "url"],
+  "authors": ["Ron Waldon (@jokeyrhyme)"]
+}
+!*/
+/* DOC
+Detects support for creating Blob URLs
+*/
+
+  var url = prefixed('URL', window, false);
+  url = url && window[url];
+  Modernizr.addTest('bloburls', url && 'revokeObjectURL' in url && 'createObjectURL' in url);
+
+/*!
+{
+  "name": "WebSockets Support",
+  "property": "websockets",
+  "authors": ["Phread [fearphage]", "Mike Sherov [mikesherov]", "Burak Yigit Kaya [BYK]"],
+  "caniuse": "websockets",
+  "tags": ["html5"],
+  "warnings": [
+    "This test will reject any old version of WebSockets even if it is not prefixed such as in Safari 5.1"
+  ],
+  "notes": [{
+    "name": "CLOSING State and Spec",
+    "href": "http://www.w3.org/TR/websockets/#the-websocket-interface"
+  }],
+  "polyfills": [
+    "sockjs",
+    "socketio",
+    "kaazing-websocket-gateway",
+    "websocketjs",
+    "atmosphere",
+    "graceful-websocket",
+    "portal",
+    "datachannel"
+  ]
+}
+!*/
+
+  Modernizr.addTest('websockets', 'WebSocket' in window && window.WebSocket.CLOSING === 2);
+
+/*!
+{
+  "name": "Binary WebSockets",
+  "property": "websocketsbinary",
+  "tags": ["websockets"],
+  "builderAliases": ["websockets_binary"]
+}
+!*/
+
+  // binaryType is truthy if there is support.. returns "blob" in new-ish chrome.
+  // plus.google.com/115535723976198353696/posts/ERN6zYozENV
+  // github.com/Modernizr/Modernizr/issues/370
+
+  Modernizr.addTest('websocketsbinary', function() {
+    var protocol = 'https:' == location.protocol ? 'wss' : 'ws',
+    protoBin;
+
+    if ('WebSocket' in window) {
+      if (protoBin = 'binaryType' in WebSocket.prototype) {
+        return protoBin;
+      }
+      try {
+        return !!(new WebSocket(protocol + '://.').binaryType);
+      } catch (e) {}
+    }
+
+    return false;
+  });
+
+/*!
+{
+  "name": "Web Workers",
+  "property": "webworkers",
+  "caniuse" : "webworkers",
+  "tags": ["performance", "workers"],
+  "notes": [{
+    "name": "W3C Reference",
+    "href": "http://www.w3.org/TR/workers/"
+  }, {
+    "name": "HTML5 Rocks article",
+    "href": "http://www.html5rocks.com/en/tutorials/workers/basics/"
+  }, {
+    "name": "MDN documentation",
+    "href": "https://developer.mozilla.org/en-US/docs/Web/Guide/Performance/Using_web_workers"
+  }],
+  "polyfills": ["fakeworker", "html5shims"]
+}
+!*/
+/* DOC
+Detects support for the basic `Worker` API from the Web Workers spec. Web Workers provide a simple means for web content to run scripts in background threads.
+*/
+
+  Modernizr.addTest('webworkers', 'Worker' in window);
+
+/*!
+{
+  "name": "Canvas",
+  "property": "canvas",
+  "caniuse": "canvas",
+  "tags": ["canvas", "graphics"],
+  "polyfills": ["flashcanvas", "excanvas", "slcanvas", "fxcanvas"]
+}
+!*/
+/* DOC
+Detects support for the `<canvas>` element for 2D drawing.
+*/
+
+  // On the S60 and BB Storm, getContext exists, but always returns undefined
+  // so we actually have to call getContext() to verify
+  // github.com/Modernizr/Modernizr/issues/issue/97/
+  Modernizr.addTest('canvas', function() {
+    var elem = createElement('canvas');
+    return !!(elem.getContext && elem.getContext('2d'));
+  });
+
+/*!
+{
+  "name": "Canvas text",
+  "property": "canvastext",
+  "caniuse": "canvas-text",
+  "tags": ["canvas", "graphics"],
+  "polyfills": ["canvastext"]
+}
+!*/
+/* DOC
+Detects support for the text APIs for `<canvas>` elements.
+*/
+
+  Modernizr.addTest('canvastext',  function() {
+    if (Modernizr.canvas  === false) {
+      return false;
+    }
+    return typeof createElement('canvas').getContext('2d').fillText == 'function';
+  });
+
+/*!
+{
+  "name": "History API",
+  "property": "history",
+  "caniuse": "history",
+  "tags": ["history"],
+  "authors": ["Hay Kranen", "Alexander Farkas"],
+  "notes": [{
+    "name": "W3C Spec",
+    "href": "http://www.w3.org/TR/html51/browsers.html#the-history-interface"
+  }, {
+    "name": "MDN documentation",
+    "href": "https://developer.mozilla.org/en-US/docs/Web/API/window.history"
+  }],
+  "polyfills": ["historyjs", "html5historyapi"]
+}
+!*/
+/* DOC
+Detects support for the History API for manipulating the browser session history.
+*/
+
+  Modernizr.addTest('history', function() {
+    // Issue #733
+    // The stock browser on Android 2.2 & 2.3, and 4.0.x returns positive on history support
+    // Unfortunately support is really buggy and there is no clean way to detect
+    // these bugs, so we fall back to a user agent sniff :(
+    var ua = navigator.userAgent;
+
+    // We only want Android 2 and 4.0, stock browser, and not Chrome which identifies
+    // itself as 'Mobile Safari' as well, nor Windows Phone (issue #1471).
+    if ((ua.indexOf('Android 2.') !== -1 ||
+        (ua.indexOf('Android 4.0') !== -1)) &&
+        ua.indexOf('Mobile Safari') !== -1 &&
+        ua.indexOf('Chrome') === -1 &&
+        ua.indexOf('Windows Phone') === -1) {
+      return false;
+    }
+
+    // Return the regular check
+    return (window.history && 'pushState' in window.history);
+  });
+
+/*!
+{
+  "name": "script[defer]",
+  "property": "scriptdefer",
+  "caniuse": "script-defer",
+  "tags": ["script"],
+  "builderAliases": ["script_defer"],
+  "authors": ["Theodoor van Donge"],
+  "warnings": ["Browser implementation of the `defer` attribute vary: http://stackoverflow.com/questions/3952009/defer-attribute-chrome#answer-3982619"],
+  "knownBugs": ["False positive in Opera 12"]
+}
+!*/
+/* DOC
+Detects support for the `defer` attribute on the `<script>` element.
+*/
+
+  Modernizr.addTest('scriptdefer', 'defer' in createElement('script'));
+
+/*!
+{
+  "name": "script[async]",
+  "property": "scriptasync",
+  "caniuse": "script-async",
+  "tags": ["script"],
+  "builderAliases": ["script_async"],
+  "authors": ["Theodoor van Donge"]
+}
+!*/
+/* DOC
+Detects support for the `async` attribute on the `<script>` element.
+*/
+
+  Modernizr.addTest('scriptasync', 'async' in createElement('script'));
+
+/*!
+{
+  "name" : "HTML5 Audio Element",
+  "property": "audio",
+  "tags" : ["html5", "audio", "media"]
+}
+!*/
+/* DOC
+Detects the audio element
+*/
+
+  // This tests evaluates support of the audio element, as well as
+  // testing what types of content it supports.
+  //
+  // We're using the Boolean constructor here, so that we can extend the value
+  // e.g.  Modernizr.audio     // true
+  //       Modernizr.audio.ogg // 'probably'
+  //
+  // Codec values from : github.com/NielsLeenheer/html5test/blob/9106a8/index.html#L845
+  //                     thx to NielsLeenheer and zcorpan
+
+  // Note: in some older browsers, "no" was a return value instead of empty string.
+  //   It was live in FF3.5.0 and 3.5.1, but fixed in 3.5.2
+  //   It was also live in Safari 4.0.0 - 4.0.4, but fixed in 4.0.5
+  Modernizr.addTest('audio', function() {
+    /* jshint -W053 */
+    var elem = createElement('audio');
+    var bool = false;
+
+    try {
+      if (bool = !!elem.canPlayType) {
+        bool      = new Boolean(bool);
+        bool.ogg  = elem.canPlayType('audio/ogg; codecs="vorbis"').replace(/^no$/, '');
+        bool.mp3  = elem.canPlayType('audio/mpeg;')               .replace(/^no$/, '');
+        bool.opus  = elem.canPlayType('audio/ogg; codecs="opus"') .replace(/^no$/, '');
+
+        // Mimetypes accepted:
+        //   developer.mozilla.org/En/Media_formats_supported_by_the_audio_and_video_elements
+        //   bit.ly/iphoneoscodecs
+        bool.wav  = elem.canPlayType('audio/wav; codecs="1"')     .replace(/^no$/, '');
+        bool.m4a  = (elem.canPlayType('audio/x-m4a;')            ||
+                     elem.canPlayType('audio/aac;'))             .replace(/^no$/, '');
+      }
+    } catch (e) { }
+
+    return bool;
+  });
+
+/*!
+{
+  "name": "HTML5 Video",
+  "property": "video",
+  "caniuse": "video",
+  "tags": ["html5"],
+  "knownBugs": [
+    "Without QuickTime, `Modernizr.video.h264` will be `undefined`; http://github.com/Modernizr/Modernizr/issues/546"
+  ],
+  "polyfills": [
+    "html5media",
+    "mediaelementjs",
+    "sublimevideo",
+    "videojs",
+    "leanbackplayer",
+    "videoforeverybody"
+  ]
+}
+!*/
+/* DOC
+Detects support for the video element, as well as testing what types of content it supports.
+
+Subproperties are provided to describe support for `ogg`, `h264` and `webm` formats, e.g.:
+
+```javascript
+Modernizr.video         // true
+Modernizr.video.ogg     // 'probably'
+```
+*/
+
+  // Codec values from : github.com/NielsLeenheer/html5test/blob/9106a8/index.html#L845
+  //                     thx to NielsLeenheer and zcorpan
+
+  // Note: in some older browsers, "no" was a return value instead of empty string.
+  //   It was live in FF3.5.0 and 3.5.1, but fixed in 3.5.2
+  //   It was also live in Safari 4.0.0 - 4.0.4, but fixed in 4.0.5
+
+  Modernizr.addTest('video', function() {
+    /* jshint -W053 */
+    var elem = createElement('video');
+    var bool = false;
+
+    // IE9 Running on Windows Server SKU can cause an exception to be thrown, bug #224
+    try {
+      if (bool = !!elem.canPlayType) {
+        bool = new Boolean(bool);
+        bool.ogg = elem.canPlayType('video/ogg; codecs="theora"').replace(/^no$/, '');
+
+        // Without QuickTime, this value will be `undefined`. github.com/Modernizr/Modernizr/issues/546
+        bool.h264 = elem.canPlayType('video/mp4; codecs="avc1.42E01E"').replace(/^no$/, '');
+
+        bool.webm = elem.canPlayType('video/webm; codecs="vp8, vorbis"').replace(/^no$/, '');
+
+        bool.vp9 = elem.canPlayType('video/webm; codecs="vp9"').replace(/^no$/, '');
+
+        bool.hls = elem.canPlayType('application/x-mpegURL; codecs="avc1.42E01E"').replace(/^no$/, '');
+      }
+    } catch (e) {}
+
+    return bool;
+  });
+
+/*!
+{
+  "name": "Inline SVG",
+  "property": "inlinesvg",
+  "caniuse": "svg-html5",
+  "tags": ["svg"],
+  "notes": [{
+    "name": "Test page",
+    "href": "http://paulirish.com/demo/inline-svg"
+  }, {
+    "name": "Test page and results",
+    "href": "http://codepen.io/eltonmesquita/full/GgXbvo/"
+  }],
+  "polyfills": ["inline-svg-polyfill"],
+  "knownBugs": ["False negative on some Chromia browsers."]
+}
+!*/
+/* DOC
+Detects support for inline SVG in HTML (not within XHTML).
+*/
+
+  Modernizr.addTest('inlinesvg', function() {
+    var div = createElement('div');
+    div.innerHTML = '<svg/>';
+    return (typeof SVGRect != 'undefined' && div.firstChild && div.firstChild.namespaceURI) == 'http://www.w3.org/2000/svg';
+  });
+
 
   // Run each test
   testRunner();
@@ -1621,6 +2490,16 @@ module.exports = Modernizr.testProp('transition', 'all', true);
 },{}],8:[function(require,module,exports){
 'use strict';
 
+module.exports = !!window.matchMedia;
+
+},{}],9:[function(require,module,exports){
+'use strict';
+
+module.exports = !!(window.requestAnimationFrame && window.cancelAnimationFrame);
+
+},{}],10:[function(require,module,exports){
+'use strict';
+
 Modernizr.addTest('cssremunit', require('./custom-detects/css/remunit'));
 Modernizr.addTest('cssboxsizing', require('./custom-detects/css/boxsizing'));
 Modernizr.addTest('csspointerevents', require('./custom-detects/css/pointerevents'));
@@ -1628,8 +2507,50 @@ Modernizr.addTest('csstransitions', require('./custom-detects/css/transitions'))
 Modernizr.addTest('csslineargradient', require('./custom-detects/css/lineargradient'));
 Modernizr.addTest('cssbackgroundoptions', require('./custom-detects/css/backgroundoptions'));
 Modernizr.addTest('csscalc', require('./custom-detects/css/calc'));
+Modernizr.addTest('requestanimationframe', require('./custom-detects/requestanimationframe'));
+Modernizr.addTest('matchmedia', require('./custom-detects/matchmedia'));
 
-},{"./custom-detects/css/backgroundoptions":1,"./custom-detects/css/boxsizing":2,"./custom-detects/css/calc":3,"./custom-detects/css/lineargradient":4,"./custom-detects/css/pointerevents":5,"./custom-detects/css/remunit":6,"./custom-detects/css/transitions":7}]},{},[8])
+var modern = !!(Modernizr.es5
+	&& Modernizr.cssremunit
+	&& Modernizr.cssvwunit
+	&& Modernizr.cssvhunit
+	&& Modernizr.csscalc
+	&& Modernizr.cssboxsizing
+	&& Modernizr.csspointerevents
+	&& Modernizr.userselect
+	&& Modernizr.csstransitions
+	&& Modernizr.cssanimations
+	&& Modernizr.csstransforms3d
+	&& Modernizr.csslineargradient
+	&& Modernizr.cssbackgroundoptions
+	&& Modernizr.flexbox
+	&& Modernizr.flexwrap
+	&& Modernizr.typedarrays
+	&& Modernizr.blobconstructor
+	&& Modernizr.bloburls
+	&& Modernizr.websockets
+	&& Modernizr.websocketsbinary
+	&& Modernizr.webworkers
+	&& Modernizr.history
+	&& Modernizr.canvastext
+	&& Modernizr.scriptdefer
+	&& Modernizr.scriptasync
+	&& Modernizr.audio
+	&& Modernizr.video
+	&& Modernizr.inlinesvg
+	&& Modernizr.requestanimationframe
+	&& Modernizr.matchmedia
+);
+
+if (modern) {
+	Modernizr.load([{
+			test: false,
+			nope: 'fallback.js'
+		}
+	]);
+}
+
+},{"./custom-detects/css/backgroundoptions":1,"./custom-detects/css/boxsizing":2,"./custom-detects/css/calc":3,"./custom-detects/css/lineargradient":4,"./custom-detects/css/pointerevents":5,"./custom-detects/css/remunit":6,"./custom-detects/css/transitions":7,"./custom-detects/matchmedia":8,"./custom-detects/requestanimationframe":9}]},{},[10])
 
 
 //# sourceMappingURL=not-supported.js.map

@@ -31,6 +31,7 @@ var modern = !!(Modernizr.es5
 	&& Modernizr.websockets
 	&& Modernizr.websocketsbinary
 	&& Modernizr.webworkers
+	&& Modernizr.history
 	&& Modernizr.canvastext
 	&& Modernizr.scriptdefer
 	&& Modernizr.scriptasync
@@ -40,3 +41,11 @@ var modern = !!(Modernizr.es5
 	&& Modernizr.requestanimationframe
 	&& Modernizr.matchmedia
 );
+
+if (modern) {
+	Modernizr.load([{
+			test: false,
+			nope: 'fallback.js'
+		}
+	]);
+}
