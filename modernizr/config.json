@@ -17,6 +17,21 @@
 		"css/transforms3d",
 		"css/animations",
 		"css/flexbox",
-		"css/flexwrap"
+		"css/flexwrap",
+		"css/vwunit",
+		"css/vhunit",
+		"es5/specification",
+		"typed-arrays",
+		"blob",
+		"url/bloburls",
+		"websockets",
+		"websockets/binary",
+		"workers/websockets",
+		"canvastext",
+		"script/defer",
+		"script/async",
+		"audio",
+		"video",
+		"svg/inline"
 	]
 }

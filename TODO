@@ -1,33 +1,21 @@
-	calc()						(no prefixes, supports +, -, /, and * operators)
-vw
-vh
-	rem							(including in 'font' shorthand rule)
-	box-sizing					(no prefixes)
-	user-select: none			(any prefix)
-	pointer-events: none
-	css transitions				(no prefixes)
-	css 3d transforms			(any prefix)
-	css linear-gradient			(no prefix, final "to" syntax)
-	css animation				(any prefix)
-	background-image options 	(background-size in shorthand, background-position offset from edges)
-	flexbox						(modern syntax, flex-wrap, any prefix)
+vw							!?(doesnt check for buggy behavior)
+vh							!?(doesnt check for buggy behavior)
+rem							!?(cross browser bugs exist)
+calc()						!?(no prefixes, supports +, -, /, and * operators,
+							cross-browser bugs exist)
+pointer-events: none		!?(only works on block and inline-block elements on ie11)
+css transitions				!?(bugs exist on ie11)
+css 3d transforms			!?(no support for perspective on ie11)
+css animation				!?(bugs exist on ie11)
+flexbox						!?(modern syntax, flex-wrap, any prefix, cross browser bugs exist)
 
-ecmascript 5
-strict mode
-typed arrays
+typed arrays				!?(no support for Uint8ClampedArray)
 
-dataset
-classList
-blob constructing
-blob URLs
-web sockets
-web workers
-requestAnimationFrame
-matchMedia
+dataset						!?(no support on svg elements)
+classList					!?(no support for second parameter of `toggle` method, 
+							or multiple tokens passed to `add`, or support on SVG elements)
 
-canvas (and text api)
-defer attribute on <script>
-async attribute on <script>
-audio element
-video element
-inline svg in html
+blob URLs					!?(cross-browser bugs exist, current detect supports prefixes)
+web sockets					!?(ff <= 37 cannot use in web workers)
+
+inline svg					!?(no support for css transforms on svg elements)
