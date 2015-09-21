@@ -54,7 +54,7 @@ if (modern) {
 	
 	Modernizr.load([{
 			test: Modernizr.partialclasslist,
-			nope: '../src/polyfills/classlist.js',
+			nope: './polyfills/classlist.js',
 			complete: function () {
 				// record completion
 			}
