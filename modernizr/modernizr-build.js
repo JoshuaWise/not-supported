@@ -1,6 +1,6 @@
 /*!
  * modernizr v3.0.0
- * Build http://modernizr.com/download?-audio-blobconstructor-bloburls-canvastext-cssanimations-csstransforms3d-cssvhunit-cssvwunit-es5-flexbox-flexwrap-history-inlinesvg-scriptasync-scriptdefer-typedarrays-userselect-video-websockets-websocketsbinary-webworkers-addtest-atrule-domprefixes-hasevent-load-mq-prefixed-prefixedcss-prefixes-testallprops-testprop-teststyles-dontmin
+ * Build http://modernizr.com/download?-audio-blobconstructor-canvastext-classlist-cssanimations-csstransforms3d-cssvhunit-cssvwunit-dataset-es5-flexbox-flexwrap-history-inlinesvg-progressbar_meter-scriptasync-scriptdefer-typedarrays-unknownelements-userselect-video-websockets-websocketsbinary-webworkers-addtest-atrule-domprefixes-hasevent-load-mq-prefixed-prefixedcss-prefixes-testallprops-testprop-teststyles-dontmin
  *
  * Copyright (c)
  *  Faruk Ates
@@ -2049,27 +2049,6 @@ Detects support for the Blob constructor, for creating file-like objects of immu
 
 /*!
 {
-  "name": "Blob URLs",
-  "property": "bloburls",
-  "caniuse": "bloburls",
-  "notes": [{
-    "name": "W3C Working Draft",
-    "href": "http://www.w3.org/TR/FileAPI/#creating-revoking"
-  }],
-  "tags": ["file", "url"],
-  "authors": ["Ron Waldon (@jokeyrhyme)"]
-}
-!*/
-/* DOC
-Detects support for creating Blob URLs
-*/
-
-  var url = prefixed('URL', window, false);
-  url = url && window[url];
-  Modernizr.addTest('bloburls', url && 'revokeObjectURL' in url && 'createObjectURL' in url);
-
-/*!
-{
   "name": "WebSockets Support",
   "property": "websockets",
   "authors": ["Phread [fearphage]", "Mike Sherov [mikesherov]", "Burak Yigit Kaya [BYK]"],
@@ -2233,6 +2212,40 @@ Detects support for the History API for manipulating the browser session history
     // Return the regular check
     return (window.history && 'pushState' in window.history);
   });
+
+/*!
+{
+  "name": "dataset API",
+  "caniuse": "dataset",
+  "property": "dataset",
+  "tags": ["dom"],
+  "builderAliases": ["dom_dataset"],
+  "authors": ["@phiggins42"]
+}
+!*/
+
+  // dataset API for data-* attributes
+  Modernizr.addTest('dataset', function() {
+    var n = createElement('div');
+    n.setAttribute('data-a-b', 'c');
+    return !!(n.dataset && n.dataset.aB === 'c');
+  });
+
+/*!
+{
+  "name": "classList",
+  "caniuse": "classlist",
+  "property": "classlist",
+  "tags": ["dom"],
+  "builderAliases": ["dataview_api"],
+  "notes": [{
+    "name": "MDN Docs",
+    "href": "https://developer.mozilla.org/en/DOM/element.classList"
+  }]
+}
+!*/
+
+  Modernizr.addTest('classlist', 'classList' in docElement);
 
 /*!
 {
@@ -2403,6 +2416,49 @@ Detects support for inline SVG in HTML (not within XHTML).
     var div = createElement('div');
     div.innerHTML = '<svg/>';
     return (typeof SVGRect != 'undefined' && div.firstChild && div.firstChild.namespaceURI) == 'http://www.w3.org/2000/svg';
+  });
+
+/*!
+{
+  "name": "progress Element",
+  "caniuse": "progressmeter",
+  "property": ["progressbar", "meter"],
+  "tags": ["elem"],
+  "builderAliases": ["elem_progress_meter"],
+  "authors": ["Stefan Wallin"]
+}
+!*/
+
+  // Tests for progressbar-support. All browsers that don't support progressbar returns undefined =)
+  Modernizr.addTest('progressbar', createElement('progress').max !== undefined);
+
+  // Tests for meter-support. All browsers that don't support meters returns undefined =)
+  Modernizr.addTest('meter', createElement('meter').max !== undefined);
+
+/*!
+{
+  "name": "Unknown Elements",
+  "property": "unknownelements",
+  "tags": ["elem"],
+  "notes": [{
+    "name": "The Story of the HTML5 Shiv",
+    "href": "http://www.paulirish.com/2011/the-history-of-the-html5-shiv/"
+  }, {
+    "name": "original implementation of detect code",
+    "href": "https://github.com/aFarkas/html5shiv/blob/bf4fcc4/src/html5shiv.js#L36"
+  }],
+  "polyfills": ["html5shiv"],
+  "authors": ["Ron Waldon (@jokeyrhyme)"]
+}
+!*/
+/* DOC
+Does the browser support HTML with non-standard / new elements?
+*/
+
+  Modernizr.addTest('unknownelements', function() {
+    var a = createElement('a');
+    a.innerHTML = '<xyz></xyz>';
+    return a.childNodes.length === 1;
   });
 
 

@@ -15,9 +15,12 @@
 * Typed Arrays
 * Blob Constructor
 * Blob URLs
+* XMLHttpRequest `.timeout` and `.ontimeout`
 * Websockets
 * Web Workers
 * History API
+* `element.dataset`
+* `element.classList`
 * HTML5 Canvas
 * `async` and `defer` attributes on `<script>` tags
 * HTML5 `<audio>` and `<video>` elements
@@ -28,16 +31,16 @@
 It is designed to be used with [autoprefixer](https://github.com/postcss/autoprefixer), which should be set with this query:
 ```
 "
-	chrome >= 31,
-	ff >= 31,
+	chrome >= 29,
+	ff >= 29,
 	safari >= 7,
 	ie >= 11,
 	edge >= 1,
-	opera >= 28,
+	opera >= 15,
 	and_chr >= 44,
 	and_ff >= 40,
 	android >= 40,
-	ios >= 8,
+	ios >= 7,
 	ie_mob >= 11,
 	op_mob >= 30
 "

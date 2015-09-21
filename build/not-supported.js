@@ -1,6 +1,6 @@
 /*!
  * modernizr v3.0.0
- * Build http://modernizr.com/download?-audio-blobconstructor-bloburls-canvastext-cssanimations-csstransforms3d-cssvhunit-cssvwunit-es5-flexbox-flexwrap-history-inlinesvg-scriptasync-scriptdefer-typedarrays-userselect-video-websockets-websocketsbinary-webworkers-addtest-atrule-domprefixes-hasevent-load-mq-prefixed-prefixedcss-prefixes-testallprops-testprop-teststyles-dontmin
+ * Build http://modernizr.com/download?-audio-blobconstructor-canvastext-classlist-cssanimations-csstransforms3d-cssvhunit-cssvwunit-dataset-es5-flexbox-flexwrap-history-inlinesvg-progressbar_meter-scriptasync-scriptdefer-typedarrays-unknownelements-userselect-video-websockets-websocketsbinary-webworkers-addtest-atrule-domprefixes-hasevent-load-mq-prefixed-prefixedcss-prefixes-testallprops-testprop-teststyles-dontmin
  *
  * Copyright (c)
  *  Faruk Ates
@@ -2049,27 +2049,6 @@ Detects support for the Blob constructor, for creating file-like objects of immu
 
 /*!
 {
-  "name": "Blob URLs",
-  "property": "bloburls",
-  "caniuse": "bloburls",
-  "notes": [{
-    "name": "W3C Working Draft",
-    "href": "http://www.w3.org/TR/FileAPI/#creating-revoking"
-  }],
-  "tags": ["file", "url"],
-  "authors": ["Ron Waldon (@jokeyrhyme)"]
-}
-!*/
-/* DOC
-Detects support for creating Blob URLs
-*/
-
-  var url = prefixed('URL', window, false);
-  url = url && window[url];
-  Modernizr.addTest('bloburls', url && 'revokeObjectURL' in url && 'createObjectURL' in url);
-
-/*!
-{
   "name": "WebSockets Support",
   "property": "websockets",
   "authors": ["Phread [fearphage]", "Mike Sherov [mikesherov]", "Burak Yigit Kaya [BYK]"],
@@ -2233,6 +2212,40 @@ Detects support for the History API for manipulating the browser session history
     // Return the regular check
     return (window.history && 'pushState' in window.history);
   });
+
+/*!
+{
+  "name": "dataset API",
+  "caniuse": "dataset",
+  "property": "dataset",
+  "tags": ["dom"],
+  "builderAliases": ["dom_dataset"],
+  "authors": ["@phiggins42"]
+}
+!*/
+
+  // dataset API for data-* attributes
+  Modernizr.addTest('dataset', function() {
+    var n = createElement('div');
+    n.setAttribute('data-a-b', 'c');
+    return !!(n.dataset && n.dataset.aB === 'c');
+  });
+
+/*!
+{
+  "name": "classList",
+  "caniuse": "classlist",
+  "property": "classlist",
+  "tags": ["dom"],
+  "builderAliases": ["dataview_api"],
+  "notes": [{
+    "name": "MDN Docs",
+    "href": "https://developer.mozilla.org/en/DOM/element.classList"
+  }]
+}
+!*/
+
+  Modernizr.addTest('classlist', 'classList' in docElement);
 
 /*!
 {
@@ -2405,6 +2418,49 @@ Detects support for inline SVG in HTML (not within XHTML).
     return (typeof SVGRect != 'undefined' && div.firstChild && div.firstChild.namespaceURI) == 'http://www.w3.org/2000/svg';
   });
 
+/*!
+{
+  "name": "progress Element",
+  "caniuse": "progressmeter",
+  "property": ["progressbar", "meter"],
+  "tags": ["elem"],
+  "builderAliases": ["elem_progress_meter"],
+  "authors": ["Stefan Wallin"]
+}
+!*/
+
+  // Tests for progressbar-support. All browsers that don't support progressbar returns undefined =)
+  Modernizr.addTest('progressbar', createElement('progress').max !== undefined);
+
+  // Tests for meter-support. All browsers that don't support meters returns undefined =)
+  Modernizr.addTest('meter', createElement('meter').max !== undefined);
+
+/*!
+{
+  "name": "Unknown Elements",
+  "property": "unknownelements",
+  "tags": ["elem"],
+  "notes": [{
+    "name": "The Story of the HTML5 Shiv",
+    "href": "http://www.paulirish.com/2011/the-history-of-the-html5-shiv/"
+  }, {
+    "name": "original implementation of detect code",
+    "href": "https://github.com/aFarkas/html5shiv/blob/bf4fcc4/src/html5shiv.js#L36"
+  }],
+  "polyfills": ["html5shiv"],
+  "authors": ["Ron Waldon (@jokeyrhyme)"]
+}
+!*/
+/* DOC
+Does the browser support HTML with non-standard / new elements?
+*/
+
+  Modernizr.addTest('unknownelements', function() {
+    var a = createElement('a');
+    a.innerHTML = '<xyz></xyz>';
+    return a.childNodes.length === 1;
+  });
+
 
   // Run each test
   testRunner();
@@ -2427,15 +2483,27 @@ Detects support for inline SVG in HTML (not within XHTML).
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
 'use strict';
 
-module.exports = Modernizr.testProp('background', 'right 5px bottom 5px/cover');
+var testElement = document.createElement('_');
+testElement.classList.add('c1', 'c2');
+testElement.classList.toggle('c3', false);
+
+var svgSupport = !document.createElementNS || ('classList' in document.createElementNS('http://www.w3.org/2000/svg', 'g'));
+var multipleAddSupport = testElement.classList.contains('c2');
+var secondToggleArgSupport = !testElement.classList.contains('c3');
+module.exports = !(svgSupport && multipleAddSupport && secondToggleArgSupport);
 
 },{}],2:[function(require,module,exports){
+'use strict';
+
+module.exports = Modernizr.testProp('background', 'right 5px bottom 5px/cover');
+
+},{}],3:[function(require,module,exports){
 'use strict';
 
 module.exports = Modernizr.testProp('boxSizing', 'border-box', true)
 	&& (document.documentMode === undefined || document.documentMode > 7);
 
-},{}],3:[function(require,module,exports){
+},{}],4:[function(require,module,exports){
 'use strict';
 
 module.exports = Modernizr.testStyles('#modernizr { width: calc(40px / (1 + 3)); }', function(el) {
@@ -2447,7 +2515,7 @@ module.exports = Modernizr.testStyles('#modernizr { width: calc(40px / (1 + 3));
 	return compStyle >= 9 && compStyle <= 11;
 });
 
-},{}],4:[function(require,module,exports){
+},{}],5:[function(require,module,exports){
 'use strict';
 
 module.exports = function () {
@@ -2461,7 +2529,7 @@ module.exports = function () {
 	return ('' + style.backgroundImage).indexOf('linear-gradient') > -1;
 };
 
-},{}],5:[function(require,module,exports){
+},{}],6:[function(require,module,exports){
 'use strict';
 
 module.exports = function () {
@@ -2470,7 +2538,7 @@ module.exports = function () {
 	return style.pointerEvents === 'none';
 };
 
-},{}],6:[function(require,module,exports){
+},{}],7:[function(require,module,exports){
 'use strict';
 
 module.exports = function() {
@@ -2482,22 +2550,33 @@ module.exports = function() {
 	return (/rem/).test(style.font);
 };
 
-},{}],7:[function(require,module,exports){
+},{}],8:[function(require,module,exports){
 'use strict';
 
 module.exports = Modernizr.testProp('transition', 'all', true);
 
-},{}],8:[function(require,module,exports){
+},{}],9:[function(require,module,exports){
 'use strict';
 
 module.exports = !!window.matchMedia;
 
-},{}],9:[function(require,module,exports){
+},{}],10:[function(require,module,exports){
+'use strict';
+
+ module.exports = !!window.XMLHttpRequest && !!(typeof new window.XMLHttpRequest().timeout === 'number');
+
+},{}],11:[function(require,module,exports){
 'use strict';
 
 module.exports = !!(window.requestAnimationFrame && window.cancelAnimationFrame);
 
-},{}],10:[function(require,module,exports){
+},{}],12:[function(require,module,exports){
+'use strict';
+
+var url = window.URL || false;
+module.exports = url && 'revokeObjectURL' in url && 'createObjectURL' in url;
+
+},{}],13:[function(require,module,exports){
 'use strict';
 
 Modernizr.addTest('cssremunit', require('./custom-detects/css/remunit'));
@@ -2509,6 +2588,8 @@ Modernizr.addTest('cssbackgroundoptions', require('./custom-detects/css/backgrou
 Modernizr.addTest('csscalc', require('./custom-detects/css/calc'));
 Modernizr.addTest('requestanimationframe', require('./custom-detects/requestanimationframe'));
 Modernizr.addTest('matchmedia', require('./custom-detects/matchmedia'));
+Modernizr.addTest('xhrtimeout', require('./custom-detects/network/xhr-timeout'));
+Modernizr.addTest('bloburls', require('./custom-detects/url/bloburls'));
 
 var modern = !!(Modernizr.es5
 	&& Modernizr.cssremunit
@@ -2528,29 +2609,39 @@ var modern = !!(Modernizr.es5
 	&& Modernizr.typedarrays
 	&& Modernizr.blobconstructor
 	&& Modernizr.bloburls
+	&& Modernizr.xhrtimeout
 	&& Modernizr.websockets
 	&& Modernizr.websocketsbinary
 	&& Modernizr.webworkers
 	&& Modernizr.history
 	&& Modernizr.canvastext
+	&& Modernizr.dataset
+	&& Modernizr.classlist
 	&& Modernizr.scriptdefer
 	&& Modernizr.scriptasync
 	&& Modernizr.audio
 	&& Modernizr.video
+	&& Modernizr.progressbar
+	&& Modernizr.unknownelements
 	&& Modernizr.inlinesvg
 	&& Modernizr.requestanimationframe
 	&& Modernizr.matchmedia
 );
 
 if (modern) {
+	Modernizr.addTest('partialclasslist', require('./bug-detects/partialclasslist'));
+	
 	Modernizr.load([{
-			test: false,
-			nope: 'fallback.js'
+			test: Modernizr.partialclasslist,
+			nope: '../src/polyfills/classlist.js',
+			complete: function () {
+				// record completion
+			}
 		}
 	]);
 }
 
-},{"./custom-detects/css/backgroundoptions":1,"./custom-detects/css/boxsizing":2,"./custom-detects/css/calc":3,"./custom-detects/css/lineargradient":4,"./custom-detects/css/pointerevents":5,"./custom-detects/css/remunit":6,"./custom-detects/css/transitions":7,"./custom-detects/matchmedia":8,"./custom-detects/requestanimationframe":9}]},{},[10])
+},{"./bug-detects/partialclasslist":1,"./custom-detects/css/backgroundoptions":2,"./custom-detects/css/boxsizing":3,"./custom-detects/css/calc":4,"./custom-detects/css/lineargradient":5,"./custom-detects/css/pointerevents":6,"./custom-detects/css/remunit":7,"./custom-detects/css/transitions":8,"./custom-detects/matchmedia":9,"./custom-detects/network/xhr-timeout":10,"./custom-detects/requestanimationframe":11,"./custom-detects/url/bloburls":12}]},{},[13])
 
 
 //# sourceMappingURL=not-supported.js.map

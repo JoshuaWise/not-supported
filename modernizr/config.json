@@ -26,16 +26,19 @@
 		"es5/specification",
 		"typed-arrays",
 		"blob",
-		"url/bloburls",
 		"websockets",
 		"websockets/binary",
 		"workers/webworkers",
 		"canvastext",
 		"history",
+		"dom/dataset",
+		"dom/classlist",
 		"script/defer",
 		"script/async",
 		"audio",
 		"video",
-		"svg/inline"
+		"svg/inline",
+		"elem/progress-meter",
+		"elem/unknown"
 	]
 }

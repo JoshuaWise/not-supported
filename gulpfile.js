@@ -45,11 +45,15 @@ gulp.task('build-min', ['build-modernizr'], function() {
 		.pipe(concat(path.basename(destPath)))
 		.pipe(uglify({
 			compress: {
-				unsafe: false
+				unsafe: false,
+				screw_ie8: true
 			},
 			mangle: {
 				keep_fnames: true,
 				screw_ie8: true,
+			},
+			output: {
+				comments: /@license|@preserve/i
 			}
 		}))
 		.pipe(rename(function (p) {p.basename += '.min';}))
