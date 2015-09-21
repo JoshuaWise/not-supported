@@ -1,5 +1,5 @@
 # not-supported
-`not-supported` is a script which, when placed in the `HEAD` of an HTML page, will limit that page's support to browsers that support most HTML5/CSS3/ES5 technologies. Specifically, it used Modernizr to test for these features:
+`not-supported` is a script which will limit that page's support to browsers that support most HTML5/CSS3/ES5 technologies. Specifically, it used Modernizr to test for these features:
 
 * CSS `rem` unit
 * CSS `vw` and `vh` units
@@ -24,6 +24,8 @@
 * HTML5 Canvas
 * `async` and `defer` attributes on `<script>` tags
 * HTML5 `<audio>` and `<video>` elements
+* HTML5 `<progress>` element
+* HTML5 unknown/unrecognized elements
 * SVG elements inline with HTML
 * `requestAnimationFrame` and `cancelAnimationFrame`
 * `window.matchMedia`
