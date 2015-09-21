@@ -4,7 +4,9 @@
   "description": "A script that allows you to use HTML5 features with confidence, by informing non-HTML5 users of their heresy.",
   "browser": "build/not-supported.min.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "$(npm bin)/gulp",
+    "watch": "$(npm bin)/gulp watch"
   },
   "repository": {
     "type": "git",
