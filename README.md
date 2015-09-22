@@ -11,6 +11,12 @@ The build of Modernizr that is provided does **NOT** add classes to the HTML ele
 
 This approach also differs from scripts that "redirect if IE8", because this one uses feature detection, meaning that non-standard browsers are handled the same way as any other browser. We do not discriminate which browser you choose, just that your browser can handle modern protocol.
 
+##### Download
+
+Development version: [not-supported.js](https://raw.githubusercontent.com/JoshuaWise/not-supported/master/build/not-supported.js)
+
+Production version: [not-supported.min.js](https://raw.githubusercontent.com/JoshuaWise/not-supported/master/build/not-supported.min.js)
+
 ## Required Features
 
 In order for `NotSupported` to be `true`, the browser must support **all** of the following features:
