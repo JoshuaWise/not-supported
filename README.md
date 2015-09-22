@@ -1,6 +1,6 @@
 # not-supported
 
-`not-supported` is a script which does 2 things:
+`not-supported` is a front-end script which does 2 things:
 
 * Provides a very opinionated and sculpted build of [Modernizr](https://modernizr.com/), which you can access through `window.Modernizr`
 * Provides `window.NotSupported` which is a Boolean, indicating if any of the Modernizr tests failed.
