@@ -13,8 +13,8 @@ This approach also differs from scripts that "redirect if IE8", because this one
 
 #### Download
 
-[not-supported.js](https://raw.githubusercontent.com/JoshuaWise/not-supported/master/build/not-supported.js) (22.45 kB gzipped)
-[not-supported.min.js](https://raw.githubusercontent.com/JoshuaWise/not-supported/master/build/not-supported.min.js) (6.01 kB gzipped)
+* [not-supported.js](https://raw.githubusercontent.com/JoshuaWise/not-supported/master/build/not-supported.js) (22.45 kB gzipped)
+* [not-supported.min.js](https://raw.githubusercontent.com/JoshuaWise/not-supported/master/build/not-supported.min.js) (6.01 kB gzipped)
 
 ## Required Features
 
