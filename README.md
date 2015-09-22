@@ -52,7 +52,7 @@ In order for `NotSupported` to be `true`, the browser must support **all** of th
 
 You might look at the list above and think "wow, I'd be cutting my user base in half!"
 
-Well, you'd be wrong. Most people are surprised at how good support for those features is these days.
+Well, you'd be wrong. Most people are surprised at how good browser support is these days.
 
 Here's a rundown of which major browsers will get a `NotSupported === false`.
 * Chrome >= 29		(98.3% of Chrome users)
