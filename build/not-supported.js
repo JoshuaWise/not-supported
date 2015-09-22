@@ -2482,15 +2482,26 @@ Does the browser support HTML with non-standard / new elements?
 })(window, document);
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
 'use strict';
+// Depends on `Modernizr.classlist` test.
 
-var testElement = document.createElement('_');
-testElement.classList.add('c1', 'c2');
-testElement.classList.toggle('c3', false);
-
-var svgSupport = !document.createElementNS || ('classList' in document.createElementNS('http://www.w3.org/2000/svg', 'g'));
-var multipleAddSupport = testElement.classList.contains('c2');
-var secondToggleArgSupport = !testElement.classList.contains('c3');
-module.exports = !(svgSupport && multipleAddSupport && secondToggleArgSupport);
+module.exports = function () {
+	if (!Modernizr.classlist) {
+		return false;
+	}
+	try {
+		var testElement = document.createElement('_');
+		testElement.classList.add('c1', 'c2');
+		testElement.classList.toggle('c3', false);
+		
+		var svgSupport = !document.createElementNS || ('classList' in document.createElementNS('http://www.w3.org/2000/svg', 'g'));
+		var multipleAddSupport = testElement.classList.contains('c2');
+		var secondToggleArgSupport = !testElement.classList.contains('c3');
+		
+		return !(svgSupport && multipleAddSupport && secondToggleArgSupport);
+	} catch (err) {
+		return true;
+	}
+};
 
 },{}],2:[function(require,module,exports){
 'use strict';
@@ -2578,68 +2589,60 @@ module.exports = url && 'revokeObjectURL' in url && 'createObjectURL' in url;
 
 },{}],13:[function(require,module,exports){
 'use strict';
+var M = window.Modernizr;
 
-Modernizr.addTest('cssremunit', require('./custom-detects/css/remunit'));
-Modernizr.addTest('cssboxsizing', require('./custom-detects/css/boxsizing'));
-Modernizr.addTest('csspointerevents', require('./custom-detects/css/pointerevents'));
-Modernizr.addTest('csstransitions', require('./custom-detects/css/transitions'));
-Modernizr.addTest('csslineargradient', require('./custom-detects/css/lineargradient'));
-Modernizr.addTest('cssbackgroundoptions', require('./custom-detects/css/backgroundoptions'));
-Modernizr.addTest('csscalc', require('./custom-detects/css/calc'));
-Modernizr.addTest('requestanimationframe', require('./custom-detects/requestanimationframe'));
-Modernizr.addTest('matchmedia', require('./custom-detects/matchmedia'));
-Modernizr.addTest('xhrtimeout', require('./custom-detects/network/xhr-timeout'));
-Modernizr.addTest('bloburls', require('./custom-detects/url/bloburls'));
+// Feature detects
+M.addTest('cssremunit', require('./custom-detects/css/remunit'));
+M.addTest('cssboxsizing', require('./custom-detects/css/boxsizing'));
+M.addTest('csspointerevents', require('./custom-detects/css/pointerevents'));
+M.addTest('csstransitions', require('./custom-detects/css/transitions'));
+M.addTest('csslineargradient', require('./custom-detects/css/lineargradient'));
+M.addTest('cssbackgroundoptions', require('./custom-detects/css/backgroundoptions'));
+M.addTest('csscalc', require('./custom-detects/css/calc'));
+M.addTest('requestanimationframe', require('./custom-detects/requestanimationframe'));
+M.addTest('matchmedia', require('./custom-detects/matchmedia'));
+M.addTest('xhrtimeout', require('./custom-detects/network/xhr-timeout'));
+M.addTest('bloburls', require('./custom-detects/url/bloburls'));
 
-var modern = !!(Modernizr.es5
-	&& Modernizr.cssremunit
-	&& Modernizr.cssvwunit
-	&& Modernizr.cssvhunit
-	&& Modernizr.csscalc
-	&& Modernizr.cssboxsizing
-	&& Modernizr.csspointerevents
-	&& Modernizr.userselect
-	&& Modernizr.csstransitions
-	&& Modernizr.cssanimations
-	&& Modernizr.csstransforms3d
-	&& Modernizr.csslineargradient
-	&& Modernizr.cssbackgroundoptions
-	&& Modernizr.flexbox
-	&& Modernizr.flexwrap
-	&& Modernizr.typedarrays
-	&& Modernizr.blobconstructor
-	&& Modernizr.bloburls
-	&& Modernizr.xhrtimeout
-	&& Modernizr.websockets
-	&& Modernizr.websocketsbinary
-	&& Modernizr.webworkers
-	&& Modernizr.history
-	&& Modernizr.canvastext
-	&& Modernizr.dataset
-	&& Modernizr.classlist
-	&& Modernizr.scriptdefer
-	&& Modernizr.scriptasync
-	&& Modernizr.audio
-	&& Modernizr.video
-	&& Modernizr.progressbar
-	&& Modernizr.unknownelements
-	&& Modernizr.inlinesvg
-	&& Modernizr.requestanimationframe
-	&& Modernizr.matchmedia
+// Bug detects
+M.addTest('partialclasslist', require('./bug-detects/partialclasslist'));
+
+window.NotSupported = !(M.es5
+	&& M.cssremunit
+	&& M.cssvwunit
+	&& M.cssvhunit
+	&& M.csscalc
+	&& M.cssboxsizing
+	&& M.csspointerevents
+	&& M.userselect
+	&& M.csstransitions
+	&& M.cssanimations
+	&& M.csstransforms3d
+	&& M.csslineargradient
+	&& M.cssbackgroundoptions
+	&& M.flexbox
+	&& M.flexwrap
+	&& M.typedarrays
+	&& M.blobconstructor
+	&& M.bloburls
+	&& M.xhrtimeout
+	&& M.websockets
+	&& M.websocketsbinary
+	&& M.webworkers
+	&& M.history
+	&& M.canvastext
+	&& M.dataset
+	&& M.classlist
+	&& M.scriptdefer
+	&& M.scriptasync
+	&& M.audio
+	&& M.video
+	&& M.progressbar
+	&& M.unknownelements
+	&& M.inlinesvg
+	&& M.requestanimationframe
+	&& M.matchmedia
 );
-
-if (modern) {
-	Modernizr.addTest('partialclasslist', require('./bug-detects/partialclasslist'));
-	
-	Modernizr.load([{
-			test: Modernizr.partialclasslist,
-			nope: '../src/polyfills/classlist.js',
-			complete: function () {
-				// record completion
-			}
-		}
-	]);
-}
 
 },{"./bug-detects/partialclasslist":1,"./custom-detects/css/backgroundoptions":2,"./custom-detects/css/boxsizing":3,"./custom-detects/css/calc":4,"./custom-detects/css/lineargradient":5,"./custom-detects/css/pointerevents":6,"./custom-detects/css/remunit":7,"./custom-detects/css/transitions":8,"./custom-detects/matchmedia":9,"./custom-detects/network/xhr-timeout":10,"./custom-detects/requestanimationframe":11,"./custom-detects/url/bloburls":12}]},{},[13])
 

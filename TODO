@@ -1,14 +1,5 @@
 flexbox					!	bugs https://github.com/philipwalton/flexbugs
-								 https://connect.microsoft.com/IE/feedbackdetail/view/1058330/ie11-will-not-apply-flexbox-on-pseudo-elements
-
-
-
-
-create event system for success/fail code paths, and progress events for polyfill loads
-
-
-
-
+							IE11 does no wrap long paragraphs or text http://jsfiddle.net/y1do9cx8/1/
 web sockets				!	ff <= 37 cannot use in web workers
 typed arrays			!	IE11 mobile doesn't support Uint8ClampedArray
 vw, vh					!	Chrome < 34 and Safari/iOS Safari <= 7 doesn't support on border widths, 								transform, box-shadow, or calc
