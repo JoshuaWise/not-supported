@@ -46,7 +46,7 @@ In order for `NotSupported` to be `true`, the browser must support **all** of th
 * `requestAnimationFrame` and `cancelAnimationFrame`
 * `window.matchMedia`
 
-*Unless otherwise noted, the feature must be supported **without** vendor prefixes*
+*Unless otherwise noted, the feature must be supported without vendor prefixes*
 
 ## Major Browser Support
 
