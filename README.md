@@ -82,7 +82,7 @@ Here's a rundown of which major browsers will get a `NotSupported === false`.
 
 ## Known Bugs in Supported Browsers
 
-`not supported` is designed to give developers the best experience possible by removing the burden of dealing with outdated browsers. However, even the most recent browsers contains some bugs in the features listed above.
+`not supported` is designed to give developers the best experience possible by removing the burden of dealing with outdated browsers. However, even the most recent browsers contain some bugs in the features listed above.
 
 Here is a **non-exhaustive** list of some bugs that you still may encounter. This list is intended as a reference for when you experience issues in a supported browser.
 
