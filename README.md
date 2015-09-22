@@ -55,7 +55,7 @@ You might look at the list above and think "wow, I'd be cutting my user base in 
 Here's a rundown of which major browsers will get a `NotSupported === false`.
 * Chrome >= 29		(98.3% of Chrome users)
 * Firefox >= 29		(94.3% of Firefox users)
-* Safari >= 7		(74.5 of Safari users, rising rapidly)
+* Safari >= 7		(74.5% of Safari users, rising rapidly)
 * IE/Edge >= 11		(69.2% of IE/Edge users)
 
 *All usage data was retreived from [StatCounter](http://gs.statcounter.com/), usage in the United States, August 2015.*
