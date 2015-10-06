@@ -1,17 +1,1 @@
-flexbox					!	bugs https://github.com/philipwalton/flexbugs
-							IE11 does no wrap long paragraphs or text http://jsfiddle.net/y1do9cx8/1/
-web sockets				!	ff <= 37 cannot use in web workers
-typed arrays			!	IE11 mobile doesn't support Uint8ClampedArray
-vw, vh					!	Chrome < 34 and Safari/iOS Safari <= 7 doesn't support on border widths, 								transform, box-shadow, or calc
-							iOS 7 has buggy behavior
-							IE11 has unexpected behavior when used in 3d transforms
-rem						!	IE11 doesn't support rem on line-height on pseudo-elements
-pointer-events: none	!	IE11 only works on block and inline-block elements
-calc()					!	IE11 doesn't support it in box-shadow, transform, or transitioned properties
-							Safari and IOS Safari 7 don't support vw or vh in calc
-							IE11 doesn't support calc in the "flex" property
-							Firefox doesn't support calc in line-height
-css animation			!	IE11 does not support @keyframes in media queries. Translate transform 									values are always interpreted as px when used in animations on IE11
-blob URLs				!	bugs exist when opening blob URLs in new tabs
-css 3d transforms		!	IE11 doesnt support transform-style: preserve-3d, Firefox doesn't recognize 							perspective the <body>
-history api				!	IE doesnt fire popstate event when the url's hash value changes
+css/transforms3d and svg/inline give false negatives on some chromia.
