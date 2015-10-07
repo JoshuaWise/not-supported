@@ -1,1 +1,1 @@
-css/transforms3d and svg/inline give false negatives on some chromia.
+css/transforms3d test needs to be fixed in modernizr
