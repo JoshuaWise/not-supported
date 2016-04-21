@@ -1,6 +1,6 @@
 {
   "name": "not-supported",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "description": "A script that allows you to use HTML5 features with confidence, by informing non-HTML5 users of their heresy.",
   "browser": "build/not-supported.min.js",
   "scripts": {
