@@ -1,6 +1,6 @@
 /*!
  * modernizr v3.1.0
- * Build http://modernizr.com/download?-audio-blobconstructor-canvastext-classlist-cssanimations-csstransforms3d-cssvhunit-cssvwunit-dataset-es5-flexbox-flexwrap-history-inlinesvg-progressbar_meter-scriptasync-scriptdefer-typedarrays-unknownelements-userselect-video-websockets-websocketsbinary-webworkers-addtest-atrule-domprefixes-hasevent-load-mq-prefixed-prefixedcss-prefixedcssvalue-prefixes-testallprops-testprop-teststyles-dontmin
+ * Build http://modernizr.com/download?-audio-blobconstructor-canvastext-classlist-cssanimations-csstransforms3d-cssvwunit-dataset-es5-flexbox-flexwrap-history-inlinesvg-progressbar_meter-scriptasync-scriptdefer-typedarrays-unknownelements-userselect-video-websockets-websocketsbinary-webworkers-addtest-atrule-domprefixes-hasevent-load-mq-prefixed-prefixedcss-prefixedcssvalue-prefixes-testallprops-testprop-teststyles-dontmin
  *
  * Copyright (c)
  *  Faruk Ates
@@ -1721,31 +1721,6 @@ else {
                               elem.currentStyle).width, 10);
 
     Modernizr.addTest('cssvwunit', compStyle == width);
-  });
-
-/*!
-{
-  "name": "CSS vh unit",
-  "property": "cssvhunit",
-  "caniuse": "viewport-units",
-  "tags": ["css"],
-  "builderAliases": ["css_vhunit"],
-  "notes": [{
-    "name": "Related Modernizr Issue",
-    "href": "https://github.com/Modernizr/Modernizr/issues/572"
-  },{
-    "name": "Similar JSFiddle",
-    "href": "http://jsfiddle.net/FWeinb/etnYC/"
-  }]
-}
-!*/
-
-  testStyles('#modernizr { height: 50vh; }', function(elem) {
-    var height = parseInt(window.innerHeight / 2, 10);
-    var compStyle = parseInt((window.getComputedStyle ?
-                              getComputedStyle(elem, null) :
-                              elem.currentStyle)['height'], 10);
-    Modernizr.addTest('cssvhunit', compStyle == height);
   });
 
 /*!

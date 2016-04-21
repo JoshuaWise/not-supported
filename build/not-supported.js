@@ -1,6 +1,6 @@
 /*!
  * modernizr v3.1.0
- * Build http://modernizr.com/download?-audio-blobconstructor-canvastext-classlist-cssanimations-csstransforms3d-cssvhunit-cssvwunit-dataset-es5-flexbox-flexwrap-history-inlinesvg-progressbar_meter-scriptasync-scriptdefer-typedarrays-unknownelements-userselect-video-websockets-websocketsbinary-webworkers-addtest-atrule-domprefixes-hasevent-load-mq-prefixed-prefixedcss-prefixedcssvalue-prefixes-testallprops-testprop-teststyles-dontmin
+ * Build http://modernizr.com/download?-audio-blobconstructor-canvastext-classlist-cssanimations-csstransforms3d-cssvwunit-dataset-es5-flexbox-flexwrap-history-inlinesvg-progressbar_meter-scriptasync-scriptdefer-typedarrays-unknownelements-userselect-video-websockets-websocketsbinary-webworkers-addtest-atrule-domprefixes-hasevent-load-mq-prefixed-prefixedcss-prefixedcssvalue-prefixes-testallprops-testprop-teststyles-dontmin
  *
  * Copyright (c)
  *  Faruk Ates
@@ -1725,31 +1725,6 @@ else {
 
 /*!
 {
-  "name": "CSS vh unit",
-  "property": "cssvhunit",
-  "caniuse": "viewport-units",
-  "tags": ["css"],
-  "builderAliases": ["css_vhunit"],
-  "notes": [{
-    "name": "Related Modernizr Issue",
-    "href": "https://github.com/Modernizr/Modernizr/issues/572"
-  },{
-    "name": "Similar JSFiddle",
-    "href": "http://jsfiddle.net/FWeinb/etnYC/"
-  }]
-}
-!*/
-
-  testStyles('#modernizr { height: 50vh; }', function(elem) {
-    var height = parseInt(window.innerHeight / 2, 10);
-    var compStyle = parseInt((window.getComputedStyle ?
-                              getComputedStyle(elem, null) :
-                              elem.currentStyle)['height'], 10);
-    Modernizr.addTest('cssvhunit', compStyle == height);
-  });
-
-/*!
-{
   "name": "ES5 Array",
   "property": "es5array",
   "notes": [{
@@ -2618,30 +2593,44 @@ module.exports = Modernizr.testProp('transition', 'all', true);
 },{}],9:[function(require,module,exports){
 'use strict';
 
-module.exports = !!window.matchMedia;
+module.exports = testStyles('#modernizr { height: 50vh; }', function (el) {
+	var height = parseInt(window.innerHeight / 2, 10);
+	var compStyle = parseInt(
+		(window.getComputedStyle
+			? getComputedStyle(el, null)
+			: el.currentStyle || {})
+		.height, 10);
+	return Math.abs(compStyle - height) <= 1;
+});
 
 },{}],10:[function(require,module,exports){
 'use strict';
 
- module.exports = !!window.XMLHttpRequest && !!(typeof new window.XMLHttpRequest().timeout === 'number');
+module.exports = !!window.matchMedia;
 
 },{}],11:[function(require,module,exports){
 'use strict';
 
-module.exports = !!(window.requestAnimationFrame && window.cancelAnimationFrame);
+ module.exports = !!window.XMLHttpRequest && !!(typeof new window.XMLHttpRequest().timeout === 'number');
 
 },{}],12:[function(require,module,exports){
+'use strict';
+
+module.exports = !!(window.requestAnimationFrame && window.cancelAnimationFrame);
+
+},{}],13:[function(require,module,exports){
 'use strict';
 
 var url = window.URL || false;
 module.exports = url && 'revokeObjectURL' in url && 'createObjectURL' in url;
 
-},{}],13:[function(require,module,exports){
+},{}],14:[function(require,module,exports){
 'use strict';
 var M = window.Modernizr;
 
 // Feature detects
 M.addTest('cssremunit', require('./custom-detects/css/remunit'));
+M.addTest('cssvhunit', require('./custom-detects/css/vhunit'));
 M.addTest('cssboxsizing', require('./custom-detects/css/boxsizing'));
 M.addTest('csspointerevents', require('./custom-detects/css/pointerevents'));
 M.addTest('csstransitions', require('./custom-detects/css/transitions'));
@@ -2693,7 +2682,7 @@ window.NotSupported = !(M.es5
 	&& M.matchmedia
 );
 
-},{"./bug-detects/partialclasslist":1,"./custom-detects/css/backgroundoptions":2,"./custom-detects/css/boxsizing":3,"./custom-detects/css/calc":4,"./custom-detects/css/lineargradient":5,"./custom-detects/css/pointerevents":6,"./custom-detects/css/remunit":7,"./custom-detects/css/transitions":8,"./custom-detects/matchmedia":9,"./custom-detects/network/xhr-timeout":10,"./custom-detects/requestanimationframe":11,"./custom-detects/url/bloburls":12}]},{},[13])
+},{"./bug-detects/partialclasslist":1,"./custom-detects/css/backgroundoptions":2,"./custom-detects/css/boxsizing":3,"./custom-detects/css/calc":4,"./custom-detects/css/lineargradient":5,"./custom-detects/css/pointerevents":6,"./custom-detects/css/remunit":7,"./custom-detects/css/transitions":8,"./custom-detects/css/vhunit":9,"./custom-detects/matchmedia":10,"./custom-detects/network/xhr-timeout":11,"./custom-detects/requestanimationframe":12,"./custom-detects/url/bloburls":13}]},{},[14])
 
 
 //# sourceMappingURL=not-supported.js.map

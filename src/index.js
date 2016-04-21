@@ -3,6 +3,7 @@ var M = window.Modernizr;
 
 // Feature detects
 M.addTest('cssremunit', require('./custom-detects/css/remunit'));
+M.addTest('cssvhunit', require('./custom-detects/css/vhunit'));
 M.addTest('cssboxsizing', require('./custom-detects/css/boxsizing'));
 M.addTest('csspointerevents', require('./custom-detects/css/pointerevents'));
 M.addTest('csstransitions', require('./custom-detects/css/transitions'));
